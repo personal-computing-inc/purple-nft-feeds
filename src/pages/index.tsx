@@ -1,11 +1,28 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "@next/font/google";
+import styles from "@/styles/Home.module.css";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import TimeAgo from "timeago-react";
+import useSWR from "swr";
+import { Mono } from "@/components/Typography";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
+
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Home() {
+  const { data } = useSWR("/api/feed", fetcher);
+
+  // const [data, setData] = useState();
+
+  // useEffect(() => {
+  //   fetch("/api/feed")
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data));
+  // }, []);
+
   return (
     <>
       <Head>
@@ -15,109 +32,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <Image src="/def-logo.svg" width={80} height={37} alt="def logo" />
+            <Mono subdued>Farcaster Feed</Mono>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
+          {data &&
+            data.map((item: any, index: number) => (
+              <div
+                key={index}
+                className="flex flex-col gap-2 max-w-lg border border-neutral-800 rounded-2xl p-4"
+              >
+                <div className="text-sm flex gap-2 font-mono">
+                  <p className="text-neutral-400">@{item.author.username}</p>
+                  <p className="">-</p>
+                  {/* <p>{new dayjs(item.timestamp)}</p> */}
+                  <TimeAgo
+                    className="text-purple-300"
+                    datetime={item.timestamp}
+                  />
+                </div>
+                <p className="break-words">{item.text}</p>
+                <div className="flex gap-4 text-xs text-purple-200 font-mono">
+                  <p>Heart: {item.reactions.count}</p>
+                  <p>Recasts: {item.recasts.count}</p>
+                  <p>Replies: {item.replies.count}</p>
+                </div>
+              </div>
+            ))}
         </div>
       </main>
     </>
-  )
+  );
 }
