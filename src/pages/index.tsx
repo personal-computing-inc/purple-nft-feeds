@@ -10,6 +10,7 @@ import { Mono } from "@/components/Typography";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// @ts-ignore
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Home() {
@@ -44,7 +45,7 @@ export default function Home() {
                 className="flex flex-col gap-2 max-w-lg border border-neutral-800 rounded-2xl p-4"
               >
                 <div className="text-sm flex gap-2 font-mono">
-                  <p className="text-neutral-400">@{item.author.username}</p>
+                  <p className="text-neutral-400">@{item.author_username}</p>
                   <p className="">-</p>
                   {/* <p>{new dayjs(item.timestamp)}</p> */}
                   <TimeAgo
