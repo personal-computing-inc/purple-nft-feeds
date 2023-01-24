@@ -53,6 +53,7 @@ export default function Home() {
                     datetime={item.timestamp}
                   />
                 </div>
+                <p className="break-words text-blue-600">{item.link}</p>
                 <p className="break-words">{item.text}</p>
                 <div className="flex gap-4 text-xs text-purple-200 font-mono">
                   <p>Heart: {item.reactions.count}</p>
