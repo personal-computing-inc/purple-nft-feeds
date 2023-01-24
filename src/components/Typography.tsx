@@ -10,7 +10,7 @@ interface BaseTextProps extends WithMarginProp {
 }
 
 export const subdued = css`
-  opacity: 0.48;
+  // opacity: 0.48;
 `;
 
 export const uppercase = css`
