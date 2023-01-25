@@ -9,7 +9,9 @@ import fetch from "isomorphic-fetch";
 import { resolve } from "path";
 
 const EIP_191_PREFIX = "eip191:";
-const TWO_DAYS_IN_MS = 60 * 60 * 24 * 1000;
+const TWO_DAYS_IN_MS = 60 * 60 * 48 * 1000;
+const ONE_HOUR_IN_MS = 60 * 60 * 1000;
+// todo: cache this token
 
 // Given an Ethers Wallet and a JSON payload, generate the custody bearer token
 const generateCustodyBearer = async (payload: any, wallet: any) => {
@@ -50,13 +52,12 @@ export default async function handler(
     method: "generateToken",
     params: {
       timestamp,
-      expiresAt: timestamp + TWO_DAYS_IN_MS,
+      expiresAt: timestamp + ONE_HOUR_IN_MS,
     },
   };
 
   const custodyBearerToken = await generateCustodyBearer(payload, wallet);
   console.log(`Custody Bearer Token: ${custodyBearerToken}\n`);
-  // Custody Bearer Token: eip191:V5Opo6K5M6JECBNurxHDtbts3Uqh/QpisEwm0ZSPqQdXrnTBvBZDZSME3HPeq/1pGP7ISwKJocGeWZESM8am8xs=
 
   const validity = await verifyCustodyBearer(
     custodyBearerToken,
@@ -95,8 +96,6 @@ export default async function handler(
       .then((res) => res.json())
       .then((res) => res.result.users);
 
-    // const promises = limitedOwners.map(async (owner: any) => {
-
     // console.log("FID", limitedOwners[0].fid);
 
     const allCasts = await Promise.all(
@@ -134,6 +133,7 @@ export default async function handler(
         replies: item.replies.count,
         reactions: item.reactions.count,
         recasts: item.recasts.count,
+        recast: item.recast || false
       };
     });
 
