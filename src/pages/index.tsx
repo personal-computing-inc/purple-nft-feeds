@@ -55,9 +55,9 @@ export default function Home() {
                 </div>
                 <p className="break-words">{item.text}</p>
                 <div className="flex gap-4 text-xs text-purple-200 font-mono">
-                  <p>Heart: {item.reactions.count}</p>
-                  <p>Recasts: {item.recasts.count}</p>
-                  <p>Replies: {item.replies.count}</p>
+                  <p>Hearts: {item.reactions}</p>
+                  <p>Recasts: {item.recasts}</p>
+                  <p>Replies: {item.replies}</p>
                 </div>
               </div>
             ))}
