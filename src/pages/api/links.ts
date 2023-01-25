@@ -11,12 +11,18 @@ export default async function handler(
     .from("casts")
     .select("*")
     .eq("recast", false)
-    .limit(50)
+    // check for record containing https
+    .filter("text", "ilike", "%https%")
+    .limit(20)
     .order("timestamp", { ascending: false });
 
   if (data) {
     // extract the first link from each cast
     data.forEach((cast) => {
+      const link = cast.text.match(/https?:\/\/[^\s]+/g)[0];
+      cast.text = cast.text.replace(link, "");
+      cast.domain = new URL(link).hostname;
+      cast.link = link;
       cast.farcasterLink = `farcaster://casts/${cast.hash}/${cast.hash}`;
     });
 
