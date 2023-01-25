@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Def Links</title>
+        <title>DEF Links</title>
         <meta name="description" content="links from Def" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -36,7 +36,7 @@ export default function Home() {
         <div className="flex flex-col bg-stone-900">
           <div className="flex flex-row bg-violet-800	text-white p-2">
             {/* <Image src="/def-logo.svg" width={80} height={37} alt="def logo" /> */}
-            <Mono className="font-bold	text-white mr-2">Def Links</Mono>
+            <Mono className="font-bold	text-white mr-2">DEF Links</Mono>
             <Mono subdued>
               <Link href={"/feed"}>raw feed</Link>
             </Mono>
